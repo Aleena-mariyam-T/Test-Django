@@ -26,7 +26,7 @@ def event(request):
     else:
         form=addeventForm()
         return render(request,"app/addevent.html",context={"addeventForm":form})
-
+# user login
 def user_login(request):
     if request.method == "POST":
         form = AuthenticationForm(request,data=request.POST)
