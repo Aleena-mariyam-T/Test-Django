@@ -17,9 +17,11 @@ class MytemplateView(TemplateView):
 
 def event(request):
     if request.method == "POST":
-        form = addeventForm(request,data=request.POST)
-        if forms.is_valid():
+        form = addeventForm(request.POST)
+        if form.is_valid():
+            event_name=form.cleaned_data.get('event_name')
             form.save()
+            return redirect('/')
         else:
             messages.error(request,"Enter the correct event")
             return render(request,"app/addevent.html",context={"addeventForm":form})
