@@ -30,22 +30,27 @@ def event(request):
         return render(request,"app/addevent.html",context={"addeventForm":form})
 # user login
 def user_login(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request,data=request.POST)
-        if form.is_valid():
-            username=form.cleaned_data.get('username')
-            password=form.cleaned_data.get('password')
-            user=authenticate(username=username,password=password)
-            print(user)
-            if user is not None:
-                login(request,user)
-                return redirect("event")
+    try:
+        if request.method == "POST":
+            form = AuthenticationForm(request,data=request.POST)
+            if form.is_valid():
+                username=form.cleaned_data.get('username')
+                password=form.cleaned_data.get('password')
+                user=authenticate(username=username,password=password)
+                print(user)
+                if user is not None:
+                    login(request,user)
+                    return redirect("event")
+                else:
+                    messages.error(request,"Invalid login")
+                    return render(request,"app/login.html",context={"login_form":form})
             else:
-                messages.error(request,"Invalid login")
-                return render(request,"app/login.html",context={"login_form":form})
+                    messages.error(request,"Invalid login")
+                    return render(request,"app/login.html",context={"login_form":form})
         else:
-                messages.error(request,"Invalid login")
-                return render(request,"app/login.html",context={"login_form":form})
-    else:
+            form=AuthenticationForm()
+            return render(request,"app/login.html",context={"login_form":form})
+    except Exception as e:
+        print(e)
         form=AuthenticationForm()
         return render(request,"app/login.html",context={"login_form":form})

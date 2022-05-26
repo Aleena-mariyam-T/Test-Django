@@ -7,13 +7,24 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
-		<link rel="stylesheet" href="#">
+		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" media="screen">
+		<link href="{% static 'css/style.css' %}" rel="stylesheet" media="screen">
+		<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" media="screen">
+		<link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet" media="screen">
+		<link href="{% static 'css/flexslider.css' %}" rel="stylesheet" media="screen">
+		<link href="{% static 'css/fancySelect.css' %}" rel="stylesheet" media="screen">
+		<link href="{% static 'css/responsive.css' %}" rel="stylesheet" media="screen">
+
+		<!--== Google Fonts ==-->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Belgrano' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	</head>
-	<nav style="height: 10%;">
-		{% block nav %} {% endblock nav%}
-	</nav>
+	<nav style="height: 7%; background-color: #C5EFF7;">
+	<ul><li><a href="{% url 'MytemplateView' %}">Home</a></li></ul></nav><br><br>
 	<body class="main-body">
 		<!-- <h1>Site Content</h1> -->
 		{% block body %}{% endblock body %}
 	</body>
-</html>
+</html>	
