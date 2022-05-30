@@ -5,4 +5,5 @@ urlpatterns=[
     path('',views.MytemplateView.as_view(),name="MytemplateView"),
     path('user_login/',views.user_login,name="user_login"),
     path('event/',views.event,name="event"),
+    path('CreateCeckoutSession',views.CreateCheckoutSession.as_view(),name="CreateCheckoutSession"),
 ]

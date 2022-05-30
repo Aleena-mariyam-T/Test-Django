@@ -5,8 +5,14 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .models import addevent
 from .forms import addeventForm
+from django.views import View
 from django.views.generic import TemplateView
-# Create your views here.
+import stripe
+from django.conf import settings
+from django.http import JsonResponse
+ # Create your views here.
+
+stripe.api_key = settings.STRIPE_SECRET_KEY 
 
 class MytemplateView(TemplateView):
     template_name = 'app/index.html'
@@ -31,7 +37,7 @@ def event(request):
 # user login
 def user_login(request):
     try:
-        if request.method == "POST":
+        if request.method == "GET":
             form = AuthenticationForm(request,data=request.POST)
             if form.is_valid():
                 username=form.cleaned_data.get('username')
@@ -54,3 +60,22 @@ def user_login(request):
         print(e)
         form=AuthenticationForm()
         return render(request,"app/login.html",context={"login_form":form})
+
+class CreateCheckoutSession(View):
+    def post(self, request, *args, **kwargs):
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    'price': '{{PRICE_ID}}',
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=YOUR_DOMAIN + '/success.html',
+            cancel_url=YOUR_DOMAIN + '/cancel.html',
+        )
+        return JsonResponse({
+            'id': checkout_session.id
+        })

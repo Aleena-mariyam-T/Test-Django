@@ -126,3 +126,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STRIPE_PUBLIC_KEY ="pk_test_51L3dfoSDy2NR9hkVYgBr8gSxTjYL8f7EyERukXqb9WnhbaMGRTA0Qya3upDjxd4pUOH1ovLUbcjbnQL0TR6eUN8Y00nrVDPEKe"
+STRIPE_SECRET_KEY ="sk_test_51L3dfoSDy2NR9hkV8le8BOSMyrTfMSUDOWUeB7KfqHqzi0WmCZ4nW6Yo4P7phlELPi1lXOm4lAuiXDbwUdVx4J9J00GrM8YyCE"
+# STRIPE_WEBHOOK_SECRET=""
