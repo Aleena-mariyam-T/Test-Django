@@ -37,7 +37,7 @@ def event(request):
 # user login
 def user_login(request):
     try:
-        if request.method == "GET":
+        if request.method == "POST":
             form = AuthenticationForm(request,data=request.POST)
             if form.is_valid():
                 username=form.cleaned_data.get('username')
@@ -63,6 +63,7 @@ def user_login(request):
 
 class CreateCheckoutSession(View):
     def post(self, request, *args, **kwargs):
+        YOUR_DOMAIN = "http://127.0.0.1:8000"
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[
@@ -73,8 +74,8 @@ class CreateCheckoutSession(View):
                 },
             ],
             mode='payment',
-            success_url=YOUR_DOMAIN + '/success.html',
-            cancel_url=YOUR_DOMAIN + '/cancel.html',
+            success_url=YOUR_DOMAIN + '/success',
+            cancel_url=YOUR_DOMAIN + '/cancel',
         )
         return JsonResponse({
             'id': checkout_session.id
