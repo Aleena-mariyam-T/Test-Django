@@ -3,13 +3,13 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import addevent
+from .models import Ticket_types, addevent,Payment
 from .forms import addeventForm
 from django.views import View
 from django.views.generic import TemplateView
 import stripe
 from django.conf import settings
-from django.http import JsonResponse
+
  # Create your views here.
 
 stripe.api_key = settings.STRIPE_SECRET_KEY 
@@ -35,6 +35,7 @@ def event(request):
         form=addeventForm()
         return render(request,"app/addevent.html",context={"addeventForm":form})
 # user login
+
 def user_login(request):
     try:
         if request.method == "POST":
@@ -60,16 +61,41 @@ def user_login(request):
         print(e)
         form=AuthenticationForm()
         return render(request,"app/login.html",context={"login_form":form})
+        
+class CheckPaymentView(TemplateView):
+    print("payment view")
+    template_name = "app/silver.html"
+    def get_context_data(self, **kwargs):
+        print("inside get method")
+        # product = Payment.objects.get(Ticket="Gold")
+        prices = Payment.objects.filter(Ticket="Gold")
+        context = super(CheckPaymentView, self).get_context_data(**kwargs)
+        context.update({
+            # "product": product,
+            "prices": prices
+        })  
+        return context
 
-class CreateCheckoutSession(View):
+class Successview(TemplateView):
+    template_name = "success.html"
+
+class CancelView(TemplateView):
+    template_name = "cancel.html"
+
+YOUR_DOMAIN = "http://127.0.0.1:8000"
+
+class CreateCheckoutSessionView(View):
+    print("checkoutview functn")
     def post(self, request, *args, **kwargs):
-        YOUR_DOMAIN = "http://127.0.0.1:8000"
+        print("inside post")
+        price = Payment.objects.get(id=self.kwargs["pk"])
+        print(price)
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': '{{PRICE_ID}}',
+                    'price': 'Payment.stripe_price_id',
                     'quantity': 1,
                 },
             ],
@@ -77,6 +103,30 @@ class CreateCheckoutSession(View):
             success_url=YOUR_DOMAIN + '/success',
             cancel_url=YOUR_DOMAIN + '/cancel',
         )
-        return JsonResponse({
-            'id': checkout_session.id
-        })
+        return redirect(checkout_session.url)
+
+    #! /usr/bin/env python3.6
+# def calculate_order_amount(items):
+    # Replace this constant with a calculation of the order's amount
+    # Calculate the order total on the server to prevent
+    # people from directly manipulating the amount on the client
+    # return 1400
+
+
+# def create_payment(request):
+#     if request.method == "POST":
+#         try:
+#             data = json.loads(request.data)
+#             # Create a PaymentIntent with the order amount and currency
+#             intent = stripe.PaymentIntent.create(
+#                 amount=calculate_order_amount(data['items']),
+#                 currency='eur',
+#                 automatic_payment_methods={
+#                     'enabled': True,
+#                 },
+#             )
+#             return jsonify({
+#                 'clientSecret': intent['client_secret']
+#             })
+#         except Exception as e:
+#             return jsonify(error=str(e)), 403

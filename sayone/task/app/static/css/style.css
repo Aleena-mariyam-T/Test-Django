@@ -188,7 +188,7 @@ select {
 }
 
 select {
-    cursor: pointer;
+    /* cursor: pointer; */
     line-height: 5.6rem;
     padding: 1.7rem 1.5rem;
     -webkit-appearance: menulist-button;
