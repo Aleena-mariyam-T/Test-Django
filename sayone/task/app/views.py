@@ -77,10 +77,10 @@ class CheckPaymentView(TemplateView):
         return context
 
 class Successview(TemplateView):
-    template_name = "success.html"
+    template_name = "app/success.html"
 
 class CancelView(TemplateView):
-    template_name = "cancel.html"
+    template_name = "app/cancel.html"
 
 YOUR_DOMAIN = "http://127.0.0.1:8000"
 
@@ -95,7 +95,7 @@ class CreateCheckoutSessionView(View):
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'Payment.stripe_price_id',
+                    'price':price.stripe_price_id,
                     'quantity': 1,
                 },
             ],
